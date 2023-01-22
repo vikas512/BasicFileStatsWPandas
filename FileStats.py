@@ -35,14 +35,17 @@ def run_program():
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
         return
-
+    # Get the input file name
+    input_file_name = os.path.basename(file_path)
+    # Get the input file name without extension
+    input_file_name_without_ext = os.path.splitext(input_file_name)[0]
+    # Generate the output file name
+    output_file_name = f"{input_file_name_without_ext}_fillrate.xlsx"
     # Check if the file already exists
-    file_path = "fill_rate_chart.xlsx"
-    if os.path.exists(file_path):
-        os.remove(file_path)
-
+    if os.path.exists(output_file_name):
+        os.remove(output_file_name)
     # Create a new workbook and add a worksheet
-    workbook = xw.Workbook(file_path)
+    workbook = xw.Workbook(output_file_name)
     worksheet = workbook.add_worksheet()
 
     # Write the headers to the worksheet
