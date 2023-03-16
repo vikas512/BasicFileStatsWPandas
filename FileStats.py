@@ -10,7 +10,6 @@ delimiter = None
 
 def open_file():
     global file_path
-    # Open the file dialog
     file_path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
     if not file_path:
         messagebox.showerror("Error", "No file selected.")
@@ -19,7 +18,6 @@ def open_file():
 
 def get_delimiter():
     global delimiter
-    # Get the delimiter from the user
     delimiter = simpledialog.askstring(title="Select Delimiter",
                                        prompt="Enter the delimiter for the selected CSV file:")
     if not delimiter:
@@ -30,29 +28,21 @@ def get_delimiter():
 def run_program():
     global file_path, delimiter
     try:
-        # Read the CSV file with the user-specified delimiter
         df = pd.read_csv(file_path, sep=delimiter)
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
         return
-    # Get the input file name
     input_file_name = os.path.basename(file_path)
-    # Get the input file name without extension
     input_file_name_without_ext = os.path.splitext(input_file_name)[0]
-    # Generate the output file name
     output_file_name = f"{input_file_name_without_ext}_fillrate.xlsx"
-    # Check if the file already exists
     if os.path.exists(output_file_name):
         os.remove(output_file_name)
-    # Create a new workbook and add a worksheet
     workbook = xw.Workbook(output_file_name)
     worksheet = workbook.add_worksheet()
 
-    # Write the headers to the worksheet
     worksheet.write_row("A1", ["column name", "total count", "fill count", "percent_fill_rate", "blank count",
                                "percent blank count", "zero count", "percent zero count"])
 
-    # Iterate through the columns and calculate fill rate for each column
     for i, col in enumerate(df.columns):
         filled_count = df[col].count()
         total_count = len(df)
@@ -62,7 +52,6 @@ def run_program():
         blank_rate = blank_count / total_count
         zero_rate = zero_count / total_count
 
-        # Write the data to the worksheet
         worksheet.write(i + 1, 0, col)
         worksheet.write(i + 1, 1, total_count)
         worksheet.write(i + 1, 2, filled_count)
